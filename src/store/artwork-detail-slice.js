@@ -1,27 +1,44 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchArtworkDetail } from "../api/artworkAPI";
-const initialState = {img:'', description:'',title:''};
+const initialState = { img: '', description: '', title: '', loading: 'idle' };
 
-const fetchArtwork = createAsyncThunk(
-    'artworks/detail',
+export const fetchArtworkDetailAction = createAsyncThunk(
+    'detail/fetch',
     async (artworkId, thunkAPI) => {
-      const response = await fetchArtworkDetail(artworkId)
-      return response.data;
+        //thunkAPI.dispatch(detailSlice.actions.setLoadingState())
+        const response = await fetchArtworkDetail(artworkId)
+        return response.data;
     }
-  )
-  
+)
+
 const detailSlice = createSlice({
     name: 'detail',
     initialState,
-    reducers:{},
-    extraReducers:(builder) => {
-        builder.addCase(fetchArtwork.fulfilled, (state, action) => {
-          const artworkData = action.payload.data;
-          state.img = artworkData.thumbnail.lqip;
-          state.title = artworkData.title;
-          state.description = artworkData.description;
-        })
-      }
+    reducers: {
+
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchArtworkDetailAction.pending, (state, action) => {
+                console.log('pending')
+                state.loading = 'pending'
+                state.img = '';
+                state.title = 'Loading...';
+                state.description = ''; 
+            })
+            .addCase(fetchArtworkDetailAction.fulfilled, (state, action) => {
+                const artworkData = action.payload;
+                state.img = `https://www.artic.edu/iiif/2/${artworkData.image_id}/full/800,/0/default.jpg`;
+                state.title = artworkData.title;
+                state.description = artworkData.description;
+                state.loading = 'succeeded';
+            })
+            .addCase(fetchArtworkDetailAction.rejected, (state, action) => {
+                console.log('failed')
+                state.loading = 'failed';
+            })
+    }
 });
+
 
 export default detailSlice;

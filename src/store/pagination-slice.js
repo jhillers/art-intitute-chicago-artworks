@@ -8,8 +8,8 @@ const paginationSlice = createSlice({
     reducers: {
         setNavigation(state, action) {
             const pagination = action.payload;
-            state.currentPage = pagination.currentPage;
-            state.totalPages = pagination.totalPages;
+            state.currentPage = pagination.current_page;
+            state.totalPages = pagination.total_pages;
         }
     }
 });
