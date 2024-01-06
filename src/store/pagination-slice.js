@@ -14,4 +14,5 @@ const paginationSlice = createSlice({
     }
 });
 
+export const paginationActions = paginationSlice.actions;
 export default paginationSlice;
