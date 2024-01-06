@@ -5,7 +5,6 @@ const initialState = { img: '', description: '', title: '', loading: 'idle' };
 export const fetchArtworkDetailAction = createAsyncThunk(
     'detail/fetch',
     async (artworkId, thunkAPI) => {
-        //thunkAPI.dispatch(detailSlice.actions.setLoadingState())
         const response = await fetchArtworkDetail(artworkId)
         return response.data;
     }
